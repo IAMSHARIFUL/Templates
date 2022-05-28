@@ -1,0 +1,216 @@
+#include <bits/stdc++.h>
+#include <vector>
+#include<math.h>
+#include<string.h>
+using namespace std;
+#define MAX 300005
+#define BEGIN 1
+#define MOD 1000000007
+#define INF 1000000000000000000
+#define EPS 0.0000000001
+#define CHAINS 18
+#define NOT_VISITED 0
+#define VISITING 1
+#define VISITED 2
+#define FASTIO ios_base::sync_with_stdio(false);cin.tie(NULL)
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/detail/standard_policies.hpp>
+struct pt
+{
+    long long x, y;
+    pt() {}
+    pt(long long _x, long long _y):x(_x), y(_y) {}
+    pt operator+(const pt & p) const
+    {
+        return pt(x + p.x, y + p.y);
+    }
+    pt operator-(const pt & p) const
+    {
+        return pt(x - p.x, y - p.y);
+    }
+    long long cross(const pt & p) const
+    {
+        return x * p.y - y * p.x;
+    }
+    long long dot(const pt & p) const
+    {
+        return x * p.x + y * p.y;
+    }
+    long long cross(const pt & a, const pt & b) const
+    {
+        return (a - *this).cross(b - *this);
+    }
+    long long dot(const pt & a, const pt & b) const
+    {
+        return (a - *this).dot(b - *this);
+    }
+    long long sqrLen() const
+    {
+        return this->dot(*this);
+    }
+};
+
+
+class pointLocationInPolygon
+{
+    bool lexComp(const pt & l, const pt & r)
+    {
+        return l.x < r.x || (l.x == r.x && l.y < r.y);
+    }
+
+    int sgn(long long val)
+    {
+        return val > 0 ? 1 : (val == 0 ? 0 : -1);
+    }
+
+    vector<pt> seq;
+    int n;
+    pt translate;
+    bool pointInTriangle(pt a, pt b, pt c, pt point)
+    {
+        long long s1 = abs(a.cross(b, c));
+        long long s2 = abs(point.cross(a, b)) + abs(point.cross(b, c)) + abs(point.cross(c, a));
+        return s1 == s2;
+    }
+public:
+    pointLocationInPolygon()
+    {
+
+    }
+    pointLocationInPolygon(vector<pt> & points)
+    {
+        prepare(points);
+    }
+    void prepare(vector<pt> & points)
+    {
+        seq.clear();
+        n = points.size();
+        int pos = 0;
+        for(int i = 1; i < n; i++)
+        {
+            if(lexComp(points[i], points[pos]))
+                pos = i;
+        }
+        translate.x=points[pos].x;
+        translate.y=points[pos].y;
+        rotate(points.begin(), points.begin() + pos, points.end());
+
+        n--;
+        seq.resize(n);
+        for(int i = 0; i < n; i++)
+            seq[i] = points[i + 1] - points[0];
+    }
+
+    bool pointInConvexPolygon(pt point)
+    {
+        point.x-=translate.x;
+        point.y-=translate.y;
+        if(seq[0].cross(point) != 0 && sgn(seq[0].cross(point)) != sgn(seq[0].cross(seq[n - 1])))
+            return false;
+        if(seq[n - 1].cross(point) != 0 && sgn(seq[n - 1].cross(point)) != sgn(seq[n - 1].cross(seq[0])))
+            return false;
+
+        if(seq[0].cross(point) == 0)
+            return seq[0].sqrLen() >= point.sqrLen();
+
+        int l = 0, r = n - 1;
+        while(r - l > 1)
+        {
+            int mid = (l + r)/2;
+            int pos = mid;
+            if(seq[pos].cross(point) >= 0)l = mid;
+            else r = mid;
+        }
+        int pos = l;
+        return pointInTriangle(seq[pos], seq[pos + 1], pt(0, 0), point);
+    }
+    ~pointLocationInPolygon()
+    {
+        seq.clear();
+    }
+};
+class Minkowski
+{
+
+    static void reorder_polygon(vector<pt> & P)
+    {
+        size_t pos = 0;
+        for(size_t i = 1; i < P.size(); i++)
+        {
+            if(P[i].y < P[pos].y || (P[i].y == P[pos].y && P[i].x < P[pos].x))
+                pos = i;
+        }
+        rotate(P.begin(), P.begin() + pos, P.end());
+    }
+public:
+    static vector<pt> minkowski(vector<pt> P, vector<pt> Q)
+    {
+        // the first vertex must be the lowest
+        reorder_polygon(P);
+        reorder_polygon(Q);
+        // we must ensure cyclic indexing
+        P.push_back(P[0]);
+        P.push_back(P[1]);
+        Q.push_back(Q[0]);
+        Q.push_back(Q[1]);
+        // main part
+        vector<pt> result;
+        size_t i = 0, j = 0;
+        while(i < P.size() - 2 || j < Q.size() - 2)
+        {
+            result.push_back(P[i] + Q[j]);
+            auto cross = (P[i + 1] - P[i]).cross(Q[j + 1] - Q[j]);
+            if(cross >= 0)
+                ++i;
+            if(cross <= 0)
+                ++j;
+        }
+        return result;
+    }
+};
+vector<pt> cities[3],D;
+int main()
+{
+    pt p,trans;
+    trans.x=INF;
+    trans.y=INF;
+    int n,i,j,q;
+    for(j=0; j<3; j++)
+    {
+        scanf("%d",&n);
+        for(i=0; i<n; i++)
+        {
+            scanf("%I64d %I64d",&p.x,&p.y);
+            cities[j].push_back(p);
+        }
+    }
+    D=Minkowski::minkowski(cities[0],cities[1]);
+    D=Minkowski::minkowski(D,cities[2]);
+    for(i=0; i<D.size(); i++)
+    {
+        if(D[i].x<trans.x||(D[i].x==trans.x&&D[i].y<trans.y))
+        {
+            trans.x=D[i].x;
+            trans.y=D[i].y;
+        }
+    }
+    pointLocationInPolygon plp(D);
+    scanf("%d",&q);
+    for(i=0; i<q; i++)
+    {
+        scanf("%I64d %I64d",&p.x,&p.y);
+        p.x=p.x*3;
+        p.y=p.y*3;
+        if(plp.pointInConvexPolygon(p))
+        {
+            printf("YES");
+        }
+        else
+        {
+            printf("NO");
+        }
+        printf("\n");
+    }
+    return 0;
+}
