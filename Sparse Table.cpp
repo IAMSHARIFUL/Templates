@@ -75,26 +75,3 @@ int minimum(int a,int b)
 {
     return min(a,b);
 }
-int main()
-{
-    vector<int> arr;
-    int n,i,q;
-    scanf("%d %d",&n,&q);
-    for(i=0;i<n;i++)
-    {
-        int a;
-        scanf("%d",&a);
-        arr.push_back(a);
-    }
-    STable<int> minstable(arr,minimum);
-    for(i=0;i<q;i++)
-    {
-        int l,r;
-        scanf("%d %d",&l,&r);
-        l--;
-        r--;
-        int ans=minstable.query(l,r);
-        printf("%d\n",ans);
-    }
-    return 0;
-}

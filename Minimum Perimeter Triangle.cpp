@@ -93,23 +93,3 @@ void rec(int l, int r)
         }
     }
 }
-
-int main()
-{
-    pt p;
-    int n,i;
-    scanf("%d",&n);
-    for(i=0; i<n; i++)
-    {
-        p.id=i+1;
-        scanf("%lf %lf",&p.x,&p.y);
-        a.push_back(p);
-    }
-    t.resize(n);
-    sort(a.begin(), a.end(), cmp_x());
-    mindist = 1000000000000000000;
-    rec(0, n);
-    printf("%f\n",mindist);
-    printf("%d %d %d",best_pair.first,best_pair.second.first,best_pair.second.second);
-    return 0;
-}

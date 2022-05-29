@@ -189,24 +189,3 @@ void BGraph::addEdge(int u, int v)
 {
     adj[u].push_back(v); // Add v to u’s list.
 }
-pair<int,int> Numbers[MAX];
-int main()
-{
-    int m,i,n=0;
-    scanf("%d",&m);
-    for(i=1;i<=m;i++)
-    {
-        scanf("%d %d",&Numbers[i].first,&Numbers[i].second);
-        n=max(n,Numbers[i].first);
-        n=max(n,Numbers[i].second);
-    }
-    BGraph bg(m,n);
-    for(i=1;i<=m;i++)
-    {
-        bg.addEdge(i,Numbers[i].first);
-        bg.addEdge(i,Numbers[i].second);
-    }
-    int ans=bg.hopcroftKarpAlgorithm();
-    printf("%d",ans);
-    return 0;
-}

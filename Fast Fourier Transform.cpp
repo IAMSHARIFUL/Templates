@@ -164,37 +164,3 @@ vector<int> multiply(vector<int> const& a, vector<int> const&b)
 */
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char s[MAX];
-
-int main()
-{
-//    READ;
-//    WRITE;
-//    FASTIO;
-
-    int n;
-    scanf("%s", s);
-    n = strlen(s);
-    vector<int> a(n), b(n);
-
-    for(int i = 0; i < n; i++){
-        if(s[i] == 'B'){
-            b[(n-1)-i] = 1;
-            a[i] = 0;
-        }
-        else{
-            b[(n-1)-i] = 0;
-            a[i] = 1;
-        }
-    }
-
-    vector<int> c = multiply(b, a);
-    for(int i = 0; i < c.size(); i++){
-        int p = i-(n-1);
-        if(1<=p && p<=n-1){
-            printf("%d\n", c[i]);
-        }
-    }
-
-    return 0;
-}

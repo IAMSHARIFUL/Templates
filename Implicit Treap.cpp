@@ -168,38 +168,3 @@ public:
         output(root,arr);
     }
 };
-vector<int> arr;
-int main()
-{
-    int n,q,m,i,j,l,r,t;
-    srand(time(NULL));
-    scanf("%d %d %d",&n,&q,&m);
-    implicit_treap<int> ttt;
-    for(i=0; i<n; i++)
-    {
-        scanf("%d",&j);
-        ttt.insert(j,i);
-    }
-    for(i=0; i<q; i++)
-    {
-        scanf("%d %d %d",&t,&l,&r);
-        l--;
-        r--;
-        if(t==1)
-        {
-            ttt.cyclic_shift(l,r);
-        }
-        else
-        {
-            ttt.reverse(l,r);
-        }
-    }
-    ttt.output(arr);
-    for(i=0; i<m; i++)
-    {
-        scanf("%d",&j);
-        j--;
-        printf("%d ",arr[j]);
-    }
-    return 0;
-}

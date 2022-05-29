@@ -90,31 +90,3 @@ int lcp(int i, int j) {
     }
     return ans;
 }
-int main()
-{
-    int k;
-    int t;
-    scanf("%d ",&t);
-    for(k=0;k<t;k++)
-    {
-        char str[MAX];
-        int i;
-        scanf("%s",str);
-        prepareSuffixArray(str);
-        prepareLCP(str);
-        /*int i;
-        for(i=0;i<n;i++)
-        {
-            printf("%d ",Array[i].LCPLength);
-        }
-        printf("\n");
-        for(i=0;i<n;i++)
-        {
-            printf("%d ",Array[i].own_rank);
-        }
-        printf("\n");*/
-        long long int answer=substrings(str);
-        printf("%lld\n",answer);
-    }
-    return 0;
-}

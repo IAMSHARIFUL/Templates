@@ -114,30 +114,3 @@ vector<int> DiscreteRoot(int n,int a,int k)
     sort(ans.begin(), ans.end());
     return ans;
 }
-int main()
-{
-    sieve();
-    PhiWithSieve();
-    int T,k;
-    scanf("%d",&T);
-    for(k=0;k<T;k++)
-    {
-        int n,a;
-        scanf("%d %d",&a,&n);
-        vector<int>res=DiscreteRoot(n,a,2);
-        if(res.size()==0)
-        {
-            printf("No root");
-        }
-        else
-        {
-            int i;
-            for(i=0;i<res.size();i++)
-            {
-                printf("%d ",res[i]);
-            }
-        }
-        printf("\n");
-    }
-    return 0;
-}
