@@ -112,33 +112,3 @@ pair<int, int> solve(const vector<seg>& a) {
 
     return make_pair(-1, -1);
 }
-vector<seg> V;
-int main()
-{
-    seg S;
-    int t,n,i,j,T=1;
-    //scanf("%d",&T);
-    for(t=1;t<=T;t++)
-    {
-        scanf("%d",&n);
-        for(i=0;i<n;i++)
-        {
-            S.id=i;
-            scanf("%lf %lf %lf %lf",&S.p.x,&S.p.y,&S.q.x,&S.q.y);
-            V.push_back(S);
-        }
-        pair<int,int> ans=solve(V);
-        if(ans.first>ans.second) swap(ans.first,ans.second);
-        V.clear();
-        if(ans.first==-1)
-        {
-            printf("NO");
-        }
-        else
-        {
-            printf("YES\n%d %d",ans.first+1,ans.second+1);
-        }
-        printf("\n");
-    }
-    return 0;
-}
